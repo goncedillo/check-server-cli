@@ -1,0 +1,21 @@
+{
+  "name": "pyb-server-checker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "debug": "node --inspect index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cron": "^1.8.2",
+    "dayjs": "^1.8.25",
+    "emojis": "^1.0.10",
+    "serve": "^11.3.0",
+    "winston": "^3.2.1"
+  }
+}

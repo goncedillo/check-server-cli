@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
+        main {
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        #server-name {
+            font-size: 0.9rem;
+            margin: 0;
+            color: #555;
+        }
+
+        #logo {
+            max-width: 400px;
+        }
+
+        .status {
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+        }
+
+        td {
+            min-width: 110px;
+        }
+
+        .status-td {
+            vertical-align: middle;
+        }
+
+        .ok {
+            background-color: green;
+        }
+
+        .ko {
+            background-color: crimson;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1 id="server-name"></h1>
+            <img id="logo" src="" alt="logo">
+        </header>
+        <section>
+            <table>
+                <thead>
+                    <th>Server</th>
+                    <th>Url</th>
+                    <th>Status</th>
+                    <th>Last check</th>
+                </thead>
+                <tbody id="data-body"></tbody>
+            </table>
+        </section>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.25/dayjs.min.js"></script>
+    <script>
+
+        fetch('../current-status.json')
+            .then(response => response.json())
+            .then(data => {
+                const $logo = document.getElementById("logo");
+                const $serverName = document.getElementById("server-name");
+                const $dataBody = document.getElementById("data-body");
+
+                $logo.src = data.info.picture;
+                $serverName.innerText = data.info.siteName;
+
+                const tableData = data.servers.map(server => `
+                    <tr>
+                        <td>${server.name}</td>
+                        <td><a href="${server.url}" target="blank">visit</a></td>
+                        <td class="status-td"><span class="status ${server.status ? 'ok' : 'ko'}"></span></td>
+                        <td>${dayjs(server.date).format('DD-MM-YYYY HH:mm')}</td>
+                    </tr>
+                `);
+
+                $dataBody.innerHTML = tableData.join("");
+            })
+            .catch(err => console.log(err));
+    </script>
+</body>
+</html>
