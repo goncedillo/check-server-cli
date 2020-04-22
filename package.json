@@ -7,6 +7,9 @@
     "start": "node index.js",
     "debug": "node --inspect index.js"
   },
+  "bin": {
+    "check-server": "./bin/server-status.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

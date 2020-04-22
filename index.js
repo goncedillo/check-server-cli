@@ -76,12 +76,16 @@ function checkAllServers() {
     });
 }
 
-// new CronJob('5 * * * * *', checkAllServers).start();
+function start() {
+    new CronJob(`${config.timer || 5} * * * * *`, checkAllServers).start();
 
-childProcess.spawn('npx', ['serve'], {
-    cwd: path.resolve(__dirname, 'static'),
-    stdio: 'inherit'
-});
+    childProcess.spawn('npx', ['serve'], {
+        cwd: path.resolve(__dirname, 'static'),
+        stdio: 'inherit'
+    });
+}
 
-checkServer(servers[0]);
+module.exports = {
+    start
+}
 
