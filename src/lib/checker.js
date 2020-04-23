@@ -2,6 +2,10 @@ const emojis = require('emojis');
 const axios = require('axios');
 
 async function getStatus(server, date) {
+  if (!server || !server.name || !server.url) {
+    throw new Error('You must provide a server object with name and url');
+  }
+
   let message = '';
   let status = false;
 
