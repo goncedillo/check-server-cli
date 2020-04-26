@@ -1,5 +1,5 @@
 {
-  "name": "pyb-server-checker",
+  "name": "check-server-cli",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
