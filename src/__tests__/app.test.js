@@ -1,6 +1,7 @@
 const fs = require('fs');
 const app = require('../app');
 const checker = require('../lib/checker');
+const cron = require('cron');
 
 jest.mock('cron');
 jest.mock('fs');
@@ -10,6 +11,16 @@ jest.mock('../lib/weblogger');
 jest.mock('../lib/logger', () => ({
   log: jest.fn(),
 }));
+
+beforeEach(() => {
+  cron.CronJob.mockImplementation((time, cb) => {
+    return {
+      start: () => {
+        cb();
+      },
+    };
+  });
+});
 
 afterEach(() => {
   jest.resetAllMocks();
@@ -58,6 +69,6 @@ describe('App', () => {
 
     await app.start();
 
-    expect(checker.getStatus).toHaveBeenCalledTimes(servers.length);
+    expect(checker.getStatus).toHaveBeenCalledTimes(servers.length * 2);
   });
 });

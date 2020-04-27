@@ -4,7 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const childProcess = require('child_process');
 const dayjs = require('dayjs');
-const CronJob = require('cron').CronJob;
+const cron = require('cron');
+const CronJob = cron.CronJob;
 
 const logger = require('./lib/logger');
 const checker = require('./lib/checker');
@@ -55,7 +56,7 @@ function loadConfig(pathToConfig) {
 async function start() {
   const config = await loadConfig(path.resolve(process.cwd(), 'config.json'));
 
-  new CronJob(`${config.timer || 5} * * * *`, () => {
+  new CronJob(`0 */${config.timer || 5} * * * *`, () => {
     checkAllServers(config.servers, config.info);
   }).start();
 
