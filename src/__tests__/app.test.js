@@ -100,7 +100,7 @@ describe('App', () => {
     });
 
     checker.getStatus.mockResolvedValue({
-      message: '',
+      message: 'daf',
       status: 200,
     });
 
@@ -122,7 +122,7 @@ describe('App', () => {
       servers: [''],
     });
 
-    checker.getStatus.mockResolvedValue({
+    checker.getStatus = jest.fn().mockResolvedValue({
       message: '',
       status: 200,
     });

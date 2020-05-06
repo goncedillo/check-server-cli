@@ -40,12 +40,12 @@ async function checkServer(server, data, config) {
   }
 }
 
-function checkAllServers(config, data) {
-  config &&
-    config.servers &&
-    config.servers.forEach((server) => {
-      checkServer(server, data, config);
-    });
+async function checkAllServers(config, data) {
+  return Promise.all(
+    config.servers.map(async (server) => {
+      await checkServer(server, data, config);
+    })
+  );
 }
 
 async function loadConfig(pathToConfig) {
