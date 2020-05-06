@@ -1,7 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const path = require('path');
-const fs = require('fs');
 const childProcess = require('child_process');
 const dayjs = require('dayjs');
 const cron = require('cron');
@@ -10,62 +9,81 @@ const CronJob = cron.CronJob;
 const logger = require('./lib/logger');
 const checker = require('./lib/checker');
 const weblogger = require('./lib/weblogger');
+const loader = require('./lib/loader');
 
 const configError = new Error('You must povide a valid config.json');
 
-async function checkServer(server, servers, info) {
-  const filePath = path.resolve(process.cwd(), 'static', 'current-status.json');
+async function checkServer(server, data, config) {
   const now = dayjs().toString();
   const dateToRegister = dayjs(now).format('DD-MM-YYYY HH:mm');
 
   const { message, status } = await checker.getStatus(server, dateToRegister);
 
-  logger.log(message);
-  weblogger.log({
-    servers,
-    serverName: server.name,
-    date: now,
-    status,
-    filePath,
-    info,
-  });
-}
+  if (data.isLoggerMode) {
+    logger.log(message, data.outputPath);
+  }
 
-function checkAllServers(servers, configInfo) {
-  servers.forEach((server) => {
-    checkServer(server, servers, configInfo);
-  });
-}
-
-function loadConfig(pathToConfig) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(pathToConfig, (err, data) => {
-      if (err) reject(configError);
-
-      const config = JSON.parse(data);
-
-      if (!config.servers || !config.servers.length) {
-        return reject(configError);
-      }
-
-      resolve(config);
+  if (data.isServerMode) {
+    weblogger.log({
+      serverName: server.name,
+      filePath: path.resolve(
+        __dirname,
+        '..',
+        'static',
+        './current-status.json'
+      ),
+      date: now,
+      servers: config.servers,
+      info: config.info,
+      status,
     });
-  });
+  }
 }
 
-async function start() {
-  const config = await loadConfig(path.resolve(process.cwd(), 'config.json'));
+async function checkAllServers(config, data) {
+  return Promise.all(
+    config.servers.map(async (server) => {
+      await checkServer(server, data, config);
+    })
+  );
+}
 
-  new CronJob(`0 */${config.timer || 5} * * * *`, () => {
-    checkAllServers(config.servers, config.info);
-  }).start();
+async function loadConfig(pathToConfig) {
+  const config = await loader.loadFile(pathToConfig);
 
-  childProcess.spawn('npx', ['serve'], {
-    cwd: path.resolve(process.cwd(), 'static'),
-    stdio: 'inherit',
-  });
+  if (!config.servers || !config.servers.length) {
+    return reject(configError);
+  }
 
-  checkAllServers(config.servers, config.info);
+  return config;
+}
+
+async function start(data) {
+  try {
+    const { configFile, isServerMode, isLoggerMode } = data;
+    const config = await loadConfig(path.normalize(configFile));
+
+    if (!isLoggerMode && !isServerMode) {
+      return console.log(
+        'You must use --server or --logger mode at least :( Bye'
+      );
+    }
+
+    new CronJob(`0 */${config.timer || 5} * * * *`, async () => {
+      await checkAllServers(config, data);
+    }).start();
+
+    if (isServerMode) {
+      childProcess.spawn('npx', ['serve'], {
+        cwd: path.resolve(__dirname, '..', 'static'),
+        stdio: 'inherit',
+      });
+    }
+
+    await checkAllServers(config, data);
+  } catch (err) {
+    console.log('You must provide a valid path to config file');
+  }
 }
 
 module.exports = {

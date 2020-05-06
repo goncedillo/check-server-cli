@@ -13,10 +13,21 @@
 
 ## How to use it
 
-1. Download this repository (not npm package yet)
-2. Run `npm install` to install dependencies
+1. Install the package
+```bash
+$ npm i check-server-cli
+```
 2. Provide a well-formed `config.json`
-3. Run the start command `npm start`
+3. Run the start command `npx check-server-cli <OPTIONS>`
+
+### Use it as global package
+
+1. Install the package
+```bash
+$ npm i check-server-cli -g
+```
+2. Provide a well-formed `config.json`
+3. Run the start command `check-server-cli <OPTIONS>`
 
 ## Configuration
 
@@ -31,7 +42,32 @@ The CLI expects a config file in *json* format, in order to provide the differen
 | server.name | Name to identify the server or environment |
 | server.url | The server url to be checked |
 
-You will find a `config.exemple.json` to start in a easier way.
+You will find a `config.example.json` to start in an easier way.
+
+## Command options
+
+### Logger mode
+
+You can run the CLI for getting statuses in a log file by the use of the `--logger` flag. The log file is located in **logs** folder by default.
+
+```bash
+$ check-server-cli --logger
+```
+
+Additionally, you might use `--output` path in order to define where will be saved the logs.
+
+```bash
+$ check-server-cli --logger --output ./my-logs-folder
+```
+
+### Web logger mode
+
+The CLI exposes an optional web interface with the `--server` flag in order to check the servers statuses in a more confortable way.  
+This is an additional feature which can be used together with the regular logger mode.
+
+```bash
+$ check-server-cli --server 
+```
 
 ## Reports
 
