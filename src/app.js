@@ -69,8 +69,8 @@ async function start(data) {
       );
     }
 
-    new CronJob(`0 */${config.timer || 5} * * * *`, () => {
-      checkAllServers(config, data);
+    new CronJob(`0 */${config.timer || 5} * * * *`, async () => {
+      await checkAllServers(config, data);
     }).start();
 
     if (isServerMode) {
@@ -80,7 +80,7 @@ async function start(data) {
       });
     }
 
-    checkAllServers(config, data);
+    await checkAllServers(config, data);
   } catch (err) {
     console.log('You must provide a valid path to config file');
   }
