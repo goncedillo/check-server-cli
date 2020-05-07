@@ -2,7 +2,7 @@
 
 # Check Server CLI
 
-> A CLI tool for checking out the readyness of a server. It is useful when are consuming an API or service which has different environments and you are not sure about its availability.
+> A CLI tool for checking out the servers availability. It is useful when are consuming an API or service which has different environments and you are not sure about its readiness.
 
 ## Dependencies
 
@@ -12,18 +12,22 @@
 ## How to use it
 
 1. Install the package
-```bash
-$ npm i check-server-cli
-```
+
+    ```bash
+    $ npm i check-server-cli
+    ```
+
 2. Provide a well-formed `config.json`
 3. Run the start command `npx check-server-cli <OPTIONS>`
 
-### Use it as global package
+### Use it as global package  
 
 1. Install the package
-```bash
-$ npm i check-server-cli -g
-```
+
+    ```bash
+    $ npm i check-server-cli -g
+    ```
+
 2. Provide a well-formed `config.json`
 3. Run the start command `check-server-cli <OPTIONS>`
 
