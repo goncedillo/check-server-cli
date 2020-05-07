@@ -1,6 +1,4 @@
-![Github Actions Status](https://github.com/goncedillo/check-server-cli/workflows/CheckServerCLI-workflow/badge.svg)
-
-[![Coverage Status](https://coveralls.io/repos/github/goncedillo/check-server-cli/badge.svg?branch=master)](https://coveralls.io/github/goncedillo/check-server-cli?branch=master)
+![Github Actions Status](https://github.com/goncedillo/check-server-cli/workflows/CheckServerCLI-workflow/badge.svg)  [![Coverage Status](https://coveralls.io/repos/github/goncedillo/check-server-cli/badge.svg?branch=master)](https://coveralls.io/github/goncedillo/check-server-cli?branch=master)
 
 # Check Server CLI
 
