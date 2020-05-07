@@ -1,0 +1,11 @@
+.DS_Store
+.eslint*
+.husky*
+.prettier*
+**/__tests__
+.github
+.vscode
+logs
+coverage
+node_modules
+config.json
